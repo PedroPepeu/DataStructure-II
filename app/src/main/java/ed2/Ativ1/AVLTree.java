@@ -23,6 +23,7 @@ public class AVLTree<T extends Comparable <T>> {
         if(currentNode == null) {
             AVLNode<T> newNode = new AVLNode<T>(info);
             newNode.setFatBal(0);
+            newNode.setHeight(1);
             return newNode;
         }
 
@@ -34,15 +35,123 @@ public class AVLTree<T extends Comparable <T>> {
         if(cmp < 0) {
             leftSubtree = insert(info, currentNode.getLeft());
             currentNode.setLeft(leftSubtree);
-            currentNode.setFatBal(currentNode.getFatBal() - 1);
         } 
         else {
             rightSubtree = insert(info, currentNode.getRight());
             currentNode.setRight(rightSubtree);
-            currentNode.setFatBal(currentNode.getFatBal() + 1);
         }
 
-        return currentNode;
+        currentNode = updateNode(currentNode);
+
+        return balance(currentNode);
+    }
+
+    private AVLNode<T> updateNode(AVLNode<T> nodeToBeUpdated) {
+        int leftHeight;
+        if(nodeToBeUpdated.getLeft() != null) leftHeight = nodeToBeUpdated.getLeft().getHeight();
+        else leftHeight = 0;
+
+        int rightHeight;
+        if(nodeToBeUpdated.getRight() != null) rightHeight = nodeToBeUpdated.getRight().getHeight();
+        else rightHeight = 0;
+
+        nodeToBeUpdated.setHeight(Math.max(leftHeight, rightHeight) + 1);
+
+        nodeToBeUpdated.setFatBal(rightHeight - leftHeight);
+        return nodeToBeUpdated;
+    }
+
+    private AVLNode<T> balance(AVLNode<T> node) {
+        // rotacao simples esquerda
+        if (node.getFatBal() < -1 && node.getLeft() != null && node.getLeft().getFatBal() <= 0) {
+            return rightRotate(node);
+        }
+    
+        // rotacao simples direita
+        if (node.getFatBal() > 1 && node.getRight() != null && node.getRight().getFatBal() >= 0) {
+            return leftRotate(node);
+        }
+    
+        // rotacao dupla para a direita
+        if (node.getFatBal() < -1 && node.getLeft() != null && node.getLeft().getFatBal() > 0) {
+            node.setLeft(leftRotate(node.getLeft()));
+            return rightRotate(node);
+        }
+    
+        // rotacao dupla para a esquerda
+        if (node.getFatBal() > 1 && node.getRight() != null && node.getRight().getFatBal() < 0) {
+            node.setRight(rightRotate(node.getRight()));
+            return leftRotate(node);
+        }
+    
+        return node;
+    }
+
+    // rotacao simples direita
+    private AVLNode<T> leftRotate(AVLNode<T> node) {
+        AVLNode<T> newRoot = node.getRight();
+        AVLNode<T> subtree = newRoot.getLeft();
+        newRoot.setLeft(node);
+        node.setRight(subtree);
+
+        node = updateNode(node);
+        newRoot = updateNode(newRoot);
+
+        return newRoot;
+    }
+
+    // rotacao simples esquerda
+    private AVLNode<T> rightRotate(AVLNode<T> node) {
+        AVLNode<T> newRoot = node.getLeft();
+        AVLNode<T> subtree = newRoot.getRight();
+        newRoot.setRight(node);
+        node.setLeft(subtree);
+
+        node = updateNode(node);
+        newRoot = updateNode(newRoot);
+
+        return newRoot;
+    }
+
+    public void nodeRemove(T info) {
+        root = nodeRemove(info, root);
+    }
+
+    private AVLNode<T> nodeRemove(T info, AVLNode<T> currentNode) {
+        if(currentNode == null) return null;
+
+        int cmp = info.compareTo(currentNode.getInfo());
+
+        if (cmp < 0) {
+            currentNode.setLeft(nodeRemove(info, currentNode.getLeft()));
+        } else if (cmp > 0) {
+            currentNode.setRight(nodeRemove(info, currentNode.getRight()));
+        } else {
+
+            if (currentNode.getLeft() == null && currentNode.getRight() == null) return null;
+            else if (currentNode.getLeft() == null) return currentNode.getRight();
+            else if (currentNode.getRight() == null) return currentNode.getLeft();
+            else {
+                AVLNode<T> nextNode = findMin(currentNode.getRight());
+                currentNode.setInfo(nextNode.getInfo());
+                currentNode.setRight(nodeRemove(nextNode.getInfo(), currentNode.getRight()));
+            }
+
+        }
+
+        currentNode = updateNode(currentNode);
+
+        return balance(currentNode);
+    }
+
+    private AVLNode<T> findMin(AVLNode<T> node) {
+        while(node.getLeft() != null) node = node.getLeft();
+        return node;
+    }
+
+    private AVLNode<T> findMax(AVLNode<T> node) {
+        while(node.getRight() != null) node = node.getRight();
+        return node;
     }
 
     public void InOrder() {

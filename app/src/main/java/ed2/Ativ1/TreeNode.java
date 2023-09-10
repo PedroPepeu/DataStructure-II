@@ -5,10 +5,12 @@ class AVLNode<T extends Comparable <T>> {
     private AVLNode<T> left;
     private T info;
     private int fatBal;
+    private int height;
     private AVLNode<T> right;
     
     AVLNode (T value) {
         this.info = value;
+        this.height = 1;
     }
     
     void setLeft (AVLNode<T> left) {
@@ -26,6 +28,10 @@ class AVLNode<T extends Comparable <T>> {
     void setFatBal (int fb) {
         this.fatBal = fb;
     }
+
+    void setHeight(int height) {
+        this.height = height;
+    }
     
     AVLNode<T> getLeft () {
         return this.left;
@@ -41,6 +47,10 @@ class AVLNode<T extends Comparable <T>> {
     
     int getFatBal () {
         return this.fatBal;
+    }
+
+    int getHeight() {
+        return this.height;
     }
     
 }

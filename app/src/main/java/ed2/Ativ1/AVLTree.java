@@ -11,8 +11,12 @@ public class AVLTree<T extends Comparable <T>> {
     // pesseioemordem CHECK
     // passeiopornivel CHECK
 
-    public AVLTree(AVLNode<T> root, Integer size) {
+    public AVLTree(AVLNode<T> root) {
         this.root = root;
+    }
+
+    public AVLTree() {
+
     }
 
     public void insert(T info) {
@@ -113,28 +117,28 @@ public class AVLTree<T extends Comparable <T>> {
         return newRoot;
     }
 
-    public void nodeRemove(T info) {
-        root = nodeRemove(info, root);
+    public void remove(T info) {
+        root = remove(info, root);
     }
 
-    private AVLNode<T> nodeRemove(T info, AVLNode<T> currentNode) {
+    private AVLNode<T> remove(T info, AVLNode<T> currentNode) {
         if(currentNode == null) return null;
 
         int cmp = info.compareTo(currentNode.getInfo());
 
         if (cmp < 0) {
-            currentNode.setLeft(nodeRemove(info, currentNode.getLeft()));
+            currentNode.setLeft(remove(info, currentNode.getLeft()));
         } else if (cmp > 0) {
-            currentNode.setRight(nodeRemove(info, currentNode.getRight()));
+            currentNode.setRight(remove(info, currentNode.getRight()));
         } else {
 
             if (currentNode.getLeft() == null && currentNode.getRight() == null) return null;
             else if (currentNode.getLeft() == null) return currentNode.getRight();
             else if (currentNode.getRight() == null) return currentNode.getLeft();
             else {
-                AVLNode<T> nextNode = findMin(currentNode.getRight());
+                AVLNode<T> nextNode = findMax(currentNode.getLeft());
                 currentNode.setInfo(nextNode.getInfo());
-                currentNode.setRight(nodeRemove(nextNode.getInfo(), currentNode.getRight()));
+                currentNode.setLeft(remove(nextNode.getInfo(), currentNode.getLeft()));
             }
 
         }
@@ -173,6 +177,7 @@ public class AVLTree<T extends Comparable <T>> {
 
     public void BreadthFirst() {
         BreadthFirst(getRoot());
+        System.out.println();
         return;
     }
 
@@ -204,4 +209,5 @@ public class AVLTree<T extends Comparable <T>> {
     public void setRoot(AVLNode<T> root) {
         this.root = root;
     }
+
 }

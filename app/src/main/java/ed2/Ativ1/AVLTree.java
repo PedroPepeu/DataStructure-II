@@ -56,12 +56,12 @@ public class AVLTree<T extends Comparable <T>> {
     }
 
     private AVLNode<T> balance(AVLNode<T> node) {
-        // rotacao simples esquerda
+        // rotacao simples direita
         if (node.getFatBal() < -1 && node.getLeft() != null && node.getLeft().getFatBal() <= 0) {
             return rightRotate(node);
         }
     
-        // rotacao simples direita
+        // rotacao simples esquerda
         if (node.getFatBal() > 1 && node.getRight() != null && node.getRight().getFatBal() >= 0) {
             return leftRotate(node);
         }
@@ -81,7 +81,7 @@ public class AVLTree<T extends Comparable <T>> {
         return node;
     }
 
-    // rotacao simples direita
+    // rotacao simples esquerda
     private AVLNode<T> leftRotate(AVLNode<T> node) {
         AVLNode<T> newRoot = node.getRight();
         AVLNode<T> subtree = newRoot.getLeft();
@@ -94,7 +94,7 @@ public class AVLTree<T extends Comparable <T>> {
         return newRoot;
     }
 
-    // rotacao simples esquerda
+    // rotacao simples direita
     private AVLNode<T> rightRotate(AVLNode<T> node) {
         AVLNode<T> newRoot = node.getLeft();
         AVLNode<T> subtree = newRoot.getRight();

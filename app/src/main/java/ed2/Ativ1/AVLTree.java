@@ -15,21 +15,14 @@ public class AVLTree<T extends Comparable <T>> {
         this.root = root;
     }
 
-    public AVLTree() {
-
-    }
+    public AVLTree() {}
 
     public void insert(T info) {
         setRoot(insert(info, getRoot()));
     }
 
     private AVLNode<T> insert(T info, AVLNode<T> currentNode) {
-        if(currentNode == null) {
-            AVLNode<T> newNode = new AVLNode<T>(info);
-            newNode.setFatBal(0);
-            newNode.setHeight(1);
-            return newNode;
-        }
+        if(currentNode == null) return new AVLNode<T>(info);
 
         int cmp = info.compareTo(currentNode.getInfo());
 
@@ -39,8 +32,7 @@ public class AVLTree<T extends Comparable <T>> {
         if(cmp < 0) {
             leftSubtree = insert(info, currentNode.getLeft());
             currentNode.setLeft(leftSubtree);
-        } 
-        else {
+        } else {
             rightSubtree = insert(info, currentNode.getRight());
             currentNode.setRight(rightSubtree);
         }
@@ -50,16 +42,14 @@ public class AVLTree<T extends Comparable <T>> {
         return balance(currentNode);
     }
 
+    private int height(AVLNode<T> node) {
+        if(node == null) return 0;
+        return 1 + Math.max(height(node.getLeft()), height(node.getRight()));
+    }
+
     private AVLNode<T> updateNode(AVLNode<T> nodeToBeUpdated) {
-        int leftHeight;
-        if(nodeToBeUpdated.getLeft() != null) leftHeight = nodeToBeUpdated.getLeft().getHeight();
-        else leftHeight = 0;
-
-        int rightHeight;
-        if(nodeToBeUpdated.getRight() != null) rightHeight = nodeToBeUpdated.getRight().getHeight();
-        else rightHeight = 0;
-
-        nodeToBeUpdated.setHeight(Math.max(leftHeight, rightHeight) + 1);
+        int leftHeight = height(nodeToBeUpdated.getLeft());
+        int rightHeight = height(nodeToBeUpdated.getRight());
 
         nodeToBeUpdated.setFatBal(rightHeight - leftHeight);
         return nodeToBeUpdated;

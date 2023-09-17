@@ -2,6 +2,7 @@ package ed2.Ativ1;
 
 class AVLNode<T extends Comparable <T>> {
 
+
     private AVLNode<T> left;
     private T info;
     private int fatBal;

@@ -43,6 +43,7 @@ public class AVLTree<T extends Comparable <T>> {
     }
 
     private int height(AVLNode<T> node) {
+        if(node == getRoot()) return 0;
         int counter = 0;
         while(node != null) {
             counter++;

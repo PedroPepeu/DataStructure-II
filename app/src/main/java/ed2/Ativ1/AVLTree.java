@@ -43,8 +43,13 @@ public class AVLTree<T extends Comparable <T>> {
     }
 
     private int height(AVLNode<T> node) {
-        if(node == null) return 0;
-        return 1 + Math.max(height(node.getLeft()), height(node.getRight()));
+        int counter = 0;
+        while(node != null) {
+            counter++;
+            if(node.fatBal() > 0) node = node.getRight();
+            else node = node.getLeft();
+        }
+        return counter;
     }
 
     private AVLNode<T> updateNode(AVLNode<T> nodeToBeUpdated) {

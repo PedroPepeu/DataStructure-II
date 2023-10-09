@@ -47,7 +47,7 @@ public class AVLTree<T extends Comparable <T>> {
         int counter = 0;
         while(node != null) {
             counter++;
-            if(node.fatBal() > 0) node = node.getRight();
+            if(node.getFatBal() > 0) node = node.getRight();
             else node = node.getLeft();
         }
         return counter;

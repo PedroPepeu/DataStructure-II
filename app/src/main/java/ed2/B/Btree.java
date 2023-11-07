@@ -3,114 +3,97 @@ package ed2.B;
 public class Btree<T extends Comparable<T>> {
 
     private Bnode<T> root;
-    private int m;
-
-    public Btree(Bnode<T> root, int m) {
+    private int order;
+    
+    public Btree(Bnode<T> root, int order) {
         this.root = root;
-        this.m = m;
+        this.order = order;
     }
 
-    public Btree(int m) {
-        this.m = m;
+    public void insert(T info) {
+        insert(info, getRoot());
     }
 
-    public void insert(T key) {
-        setRoot(insert(key, getRoot()));
-    }
-
-    private Bnode<T> insert(T key, Bnode<T> currentNode) {
-        if(currentNode == null) {
-            Bnode<T> node = new Bnode<T>(getM(), true);
-            node.getKeys()[0] = key;
-            node.setKeysAllocated(1);;
-            return node;
+    private void insert(T info, Bnode<T> currNode) {
+        if(currNode == null) {
+            Bnode<T> newNode = new Bnode<>();
+            LinkedList<T> newInfos = new LinkedList<>();
+            newInfos.add(info);
+            newNode.setInfos(newInfos);
+            setRoot(newNode);
+            return;
         }
 
-        if(currentNode.getKeysAllocated() == (2*currentNode.getM()-1)) {
-            Bnode<T> newRoot = new Bnode<>(m, false);
-            newRoot.getnChilds()[0] = currentNode;
-            split(newRoot, 0);
-            return newRoot;
-        }
-
-        return insertNonFull(currentNode, key);
-    }
-
-    private Bnode<T> insertNonFull(Bnode<T> currentNode, T key) {
-        int i = currentNode.getKeysAllocated() - 1;
-        int cmp = key.compareTo(currentNode.getKeys()[i]);
-        
-        if(currentNode.isLeaf()) {
-            while(i >= 0 && cmp < 0) {
-                currentNode.getKeys()[i + 1] = currentNode.getKeys()[i];
-                i--;
-            }
-            currentNode.getKeys()[i+1] = key;
-            currentNode.setKeysAllocated(currentNode.getKeysAllocated()+1);
-
-            return currentNode;
-        } 
-        
-        while(i >= 0 && cmp < 0) {
-            i--;
-        }
-        i++;
-        if(currentNode.getnChilds()[i].getKeysAllocated() == (2*currentNode.getM()-1)) {
-            split(currentNode, i);
-            if(key.compareTo(currentNode.getKeys()[i]) > 0) i++;
-        }
-        return insertNonFull(currentNode.getnChilds()[i], key);
-    }
-
-    public void delete(T key) {
-
-    }
-
-    private Bnode<T> delete(Bnode<T> node) {
-
-    }
-
-    private void split(Bnode<T> parentNode, int idx) {
-        Bnode<T> childNode = parentNode.getnChilds()[idx];
-        Bnode<T> newChildNode = new Bnode<T>(getM(), childNode.isLeaf());
-
-        for(int i = 0; i < getM() - 1; i++) {
-            newChildNode.getKeys()[i] = childNode.getKeys()[i+getM()];
-            childNode.getnChilds()[i+getM()] = null;
-        }
-
-        if (!childNode.isLeaf()) {
-            for (int i = 0; i < getM(); i++) {
-                newChildNode.getnChilds()[i] = childNode.getnChilds()[i + getM()];
-                childNode.getnChilds()[i + getM()] = null;
+        while(!currNode.isLeaf()) {
+            int i = 0;
+            LinkedListNode<T> aNode = currNode.getInfos().getHead();
+            while(aNode!= null) {
+                if(info.compareTo(aNode.getInfo()) < 0) {
+                    currNode = currNode.getChildren().get(i);
+                }
+                i++;
+                aNode = aNode.getNext();
             }
         }
 
-        for (int i = parentNode.getNumOfKeys(); i > idx; i--) {
-            parentNode.getnChilds()[i + 1] = parentNode.getnChilds()[i];
-            parentNode.getKeys()[i] = parentNode.getKeys()[i - 1];
+        if(currNode.getInfos().size() == 2*order-1) { // full
+            currNode = split(currNode);
+            return;
         }
 
-        parentNode.getnChilds()[idx + 1] = newChildNode;
-        parentNode.getKeys()[idx] = childNode.getKeys()[getM() - 1];
-        childNode.getKeys()[getM() - 1] = null;
-        parentNode.setKeysAllocated(parentNode.getKeysAllocated()+1);
+        
+
     }
 
-    public Bnode<T> getRoot() {
+    public Bnode<T> split(Bnode<T> currNode) {
+        Bnode<T> leftN = new Bnode<>();
+        Bnode<T> rightN = new Bnode<>();
+        T mid;
+        int limit = currNode.getInfos().size() % 2 == 0 ? (currNode.getInfos().size()/2)-1 : (currNode.getInfos().size()+1)/2;
+        LinkedListNode<T> node = currNode.getInfos().getHead();
+        int i = 0;
+
+        while(i < limit) {
+            leftN.getInfos().add(node.getInfo());
+            node = node.getNext();
+            i++;
+        }
+        mid = node.getInfo();
+        node = node.getNext();
+        while(node != null) {
+            rightN.getInfos().add(node.getInfo());
+            node = node.getNext();
+        }
+
+        if(currNode.getParent() == null) {
+            currNode.getChildren().add(leftN);
+            currNode.getChildren().add(rightN);
+            LinkedList<T> newL = new LinkedList<>();
+            newL.add(mid);
+            currNode.setInfos(newL);
+            currNode.setLeaf(false); // remember to set it to the another one
+            return currNode;
+        } else {
+            currNode.getParent().getInfos().add(mid);
+            currNode.getParent().getChildren().add(rightN);
+            return leftN;
+        }
+    }
+
+    private Bnode<T> getRoot() {
         return root;
     }
 
-    public void setRoot(Bnode<T> root) {
+    private void setRoot(Bnode<T> root) {
         this.root = root;
     }
 
-    public int getM() {
-        return m;
+    private int getOrder() {
+        return order;
     }
 
-    public void setM(int m) {
-        this.m = m;
+    private void setOrder(int order) {
+        this.order = order;
     }
     
 }

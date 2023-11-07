@@ -7,10 +7,6 @@ public class AVLTree<T extends Comparable <T>> {
 
     private AVLNode<T> root;
 
-    // inserir CHECK
-    // pesseioemordem CHECK
-    // passeiopornivel CHECK
-
     public AVLTree(AVLNode<T> root) {
         this.root = root;
     }

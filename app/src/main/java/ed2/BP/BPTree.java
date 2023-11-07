@@ -6,6 +6,7 @@ import java.util.ArrayList;
 public class BPTree<K extends Comparable <K>> {
 
     BPNode<K> root;
+    int order;
 
     public BPTree(BPNode<K> root) {
         this.root = root;
@@ -27,9 +28,20 @@ public class BPTree<K extends Comparable <K>> {
         }
 
         if(!currNode.isLeaf()) {
-            for(int i = 0; i < currNode.getKeys().size(); i++) {
-                
+            List<K> lNode = currNode.getKeys();
+            int i;
+            for(i = 0; i < currNode.getKeys().size(); i++) {
+                if(key.compareTo(lNode.get(i)) < 0) {
+                    break;
+                }
             }
+            return currNode.getChildren().get(i+1);
+        }
+
+        if(currNode.getKeys().size() < order) {
+            List<K> auxNode = currNode.getKeys();
+            auxNode.add(key);
+            
         }
         
 
@@ -38,7 +50,7 @@ public class BPTree<K extends Comparable <K>> {
     }
 
     private BPNode<K> split(BPNode<K> nodeToSplit) {
-        
+        return null;
     }
 
     public void delete(K key) {

@@ -1,69 +1,57 @@
 package ed2.B;
 
+import java.util.ArrayList;
+import java.util.List;
+
 class Bnode<T extends Comparable<T>> {
+    
+    private Bnode<T> parent;
+    private LinkedList<T> infos;
+    private List<Bnode<T>> children;
+    private boolean isLeaf;
 
-    private T keys[];
-    private int m; // size
-    private Bnode nChilds[]; // m + 1
-    private int numOfKeys;
-    private boolean leaf;
-    private int keysAllocated;
-
-    public Bnode (int m, boolean leaf) {
-        this.keys = new T[m*m];
-        this.nChilds = new Bnode[(m*m)+1];
-        this.m = m;
-        this.leaf = leaf;
-        this.numOfKeys = 0;
-        this.keysAllocated = 0;
+    public Bnode(LinkedList<T> infos, List<Bnode<T>> children) {
+        this.infos = infos;
+        this.children = children;
+        this.isLeaf = true;
     }
 
-    public T[] getKeys() {
-        return keys;
+    public Bnode() {
+        infos = new LinkedList<T>();
+        children = new ArrayList<>();
+        isLeaf = true;
     }
 
-    public void setKeys(T[] keys) {
-        this.keys = keys;
+    LinkedList<T> getInfos() {
+        return infos;
     }
 
-    public int getM() {
-        return m;
+    List<Bnode<T>> getChildren() {
+        return children;
     }
 
-    public void setM(int m) {
-        this.m = m;
+    public void setInfos(LinkedList<T> infos) {
+        this.infos = infos;
     }
 
-    public Bnode[] getnChilds() {
-        return nChilds;
-    }
-
-    public void setnChilds(Bnode[] nChilds) {
-        this.nChilds = nChilds;
-    }
-
-    public int getNumOfKeys() {
-        return numOfKeys;
-    }
-
-    public void setNumOfKeys(int numOfKeys) {
-        this.numOfKeys = numOfKeys;
+    public void setChildren(List<Bnode<T>> children) {
+        this.children = children;
     }
 
     public boolean isLeaf() {
-        return leaf;
+        return isLeaf;
     }
 
-    public void setLeaf(boolean leaf) {
-        this.leaf = leaf;
+    public void setLeaf(boolean isLeaf) {
+        this.isLeaf = isLeaf;
     }
 
-    public int getKeysAllocated() {
-        return keysAllocated;
+    public Bnode<T> getParent() {
+        return parent;
     }
 
-    public void setKeysAllocated(int keysAllocated) {
-        this.keysAllocated = keysAllocated;
+    public void setParent(Bnode<T> parent) {
+        this.parent = parent;
     }
-
+    
 }

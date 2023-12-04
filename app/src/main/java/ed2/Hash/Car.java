@@ -1,13 +1,13 @@
 package ed2.Hash;
 
-public class Carro {
+public class Car {
     private String plate;
     private String brand;
     private String model;
     private String color;
     private String Owner_register;
 
-    public Carro(String plate, String brand, String model, String color, String Owner_register) {
+    public Car(String plate, String brand, String model, String color, String Owner_register) {
         this.plate = plate;
         this.brand = brand;
         this.model = model;
@@ -15,7 +15,7 @@ public class Carro {
         this.Owner_register = Owner_register;
     }
 
-    public Carro(String plate) {
+    public Car(String plate) {
         this.plate = plate;
         this.brand = null;
         this.model = null;

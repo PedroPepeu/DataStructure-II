@@ -1,22 +1,23 @@
 package ed2.Hash;
 
 public class Node {
+
     private String plate;
     private int pos;
     private int status;
     private int next;
 
-    public Node(int pos){
+    public Node(String plate, int pos, int status, int next){
+        this.plate = plate;
         this.pos = pos;
-        this.status = 0;
+        this.status = 1;
         this.next = -1;
     }
 
-    
-
-    public Node(int posicao, int status, int next){
-        this.posicao = posicao;
-        this.status = 1;
+    public Node(int pos){
+        this.plate = null;
+        this.pos = pos;
+        this.status = 0;
         this.next = -1;
     }
 
@@ -29,7 +30,7 @@ public class Node {
     }
 
     public int getPos(){
-        return posicao;
+        return pos;
     }
 
     public int getNext(){
@@ -40,30 +41,17 @@ public class Node {
         return status == 1;
     }
 
-    @Override
-    public String toString(){
-        return "Ocupado: " + String.valueOf(isOccupied());
-    }
-
-
-
     public String getPlate() {
         return plate;
     }
-
-
 
     public void setPlate(String plate) {
         this.plate = plate;
     }
 
-
-
     public void setPos(int pos) {
         this.pos = pos;
     }
-
-
 
     public int getStatus() {
         return status;

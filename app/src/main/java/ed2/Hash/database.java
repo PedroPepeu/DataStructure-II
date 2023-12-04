@@ -1,3 +1,5 @@
+package ed2.Hash;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.FileWriter;

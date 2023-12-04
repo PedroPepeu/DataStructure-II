@@ -1,16 +1,26 @@
-public class carro {
+package ed2.Hash;
+
+public class Carro {
     private String plate;
     private String brand;
     private String model;
     private String color;
     private String Owner_register;
 
-    public carro(String plate, String brand, String model, String color, String Owner_register) {
+    public Carro(String plate, String brand, String model, String color, String Owner_register) {
         this.plate = plate;
         this.brand = brand;
         this.model = model;
         this.color = color;
         this.Owner_register = Owner_register;
+    }
+
+    public Carro(String plate) {
+        this.plate = plate;
+        this.brand = null;
+        this.model = null;
+        this.color = null;
+        this.Owner_register = null;
     }
 
     public String getPlate() {
@@ -51,6 +61,18 @@ public class carro {
 
     public void setOwner_register(String owner_register) {
         Owner_register = owner_register;
+    }
+
+    @Override
+    public String toString() {
+        String out = "";
+        out+=plate+=" ";
+        out+=brand+=" ";
+        out+=model+=" ";
+        out+=color+=" ";
+        out+=Owner_register;
+
+        return out;
     }
 
 }
